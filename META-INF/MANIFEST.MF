@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Sealed: true
+Created-By: Fit2Cloud Computing
+Implementation-Title: Fit2Cloud self-service SDK for Java
+Implementation-Version: 1.0.0
+url: http://www.fit2cloud.com
