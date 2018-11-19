@@ -251,4 +251,17 @@
         </plugins>
     </build>
 
+    <distributionManagement>
+        <repository>
+            <id>fit2cloud-self-service-sdk</id>
+            <name>fit2cloud-self-service-sdk</name>
+            <url>http://127.0.0.1/Users/apple/repository/com/fit2cloud/releases/fit2cloud-self-service-sdk/</url>
+        </repository>
+        <snapshotRepository>
+            <id>fit2cloud-self-service-sdk</id>
+            <name>fit2cloud-self-service-sdk</name>
+            <url>http://127.0.0.1/Users/apple/repository/com/fit2cloud/snapshots/fit2cloud-self-service-sdk/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
 </project>
