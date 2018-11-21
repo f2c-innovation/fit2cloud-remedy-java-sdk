@@ -177,6 +177,7 @@ public class UBbaClient {
             JSONObject json = restTemplate.postForEntity(jsonObject.getString("url"), request, JSONObject.class).getBody();
 
             return new ResultHolder(json);
+
         }catch (Exception e){
 
             LogUtil.error(e.getMessage());
