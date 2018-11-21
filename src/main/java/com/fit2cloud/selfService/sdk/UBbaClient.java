@@ -56,25 +56,6 @@ public class UBbaClient {
         }
     }
 
-//    public Object loginRemedyToken(){
-//
-//        CloseableHttpClient httpClient = HttpClients.createDefault();
-//        HttpPost httpPost = new HttpPost("http://localhost:8008/api/jwt/login");
-//
-//        // send the username and password
-//        List<NameValuePair> nvps = new ArrayList<>();
-//        nvps.add(new BasicNameValuePair("username", "Allen"));
-//        nvps.add(new BasicNameValuePair("password", "password"));
-//        httpPost.setEntity(new UrlEncodedFormEntity(nvps));
-//
-//        // make the call and print the token
-//        HttpEntity entity = response.getEntity();
-//        String token = EntityUtils.toString(entity, StandardCharsets.UTF_8);
-//
-//        return token;
-//
-//    }
-
     public void releaseRemedyToken(JSONObject jsonObject) {
 
         try {
@@ -95,7 +76,7 @@ public class UBbaClient {
 
     }
 
-    public Object createRemedyEntry(JSONObject jsonObject) {
+    public Object createRemedyCMDBEntry(JSONObject jsonObject) {
 
         try {
             HttpHeaders headers = new HttpHeaders();
@@ -115,12 +96,42 @@ public class UBbaClient {
 
             return new ResultHolder(json);
         }catch (Exception e){
+
             LogUtil.error(e.getMessage());
             return new ResultHolder(false,e.getMessage());
+
         }
     }
 
-    public Object updateRemedyEntry(JSONObject jsonObject) {
+    public Object createRemedyITSMEntry(JSONObject jsonObject) {
+
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.add("Authorization", jsonObject.getString("token"));
+            headers.add("X-AR-Client-Type", jsonObject.getString("X-AR-Client-Type"));
+            headers.add("X-AR-RPC-Queue", jsonObject.getString("X-AR-RPC-Queue"));
+
+            MultiValueMap<String, String> map = JSONObject.toJavaObject(jsonObject, MultiValueMap.class);
+            map.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            JSONObject json = restTemplate.postForEntity(jsonObject.getString("url"), request, JSONObject.class).getBody();
+
+            return new ResultHolder(json);
+        }catch (Exception e){
+
+            LogUtil.error(e.getMessage());
+            return new ResultHolder(false,e.getMessage());
+
+        }
+    }
+
+
+    public Object updateRemedyCMDBEntry(JSONObject jsonObject) {
 
         try {
             HttpHeaders headers = new HttpHeaders();
@@ -140,9 +151,39 @@ public class UBbaClient {
 
             return new ResultHolder(json);
         }catch (Exception e){
+
             LogUtil.error(e.getMessage());
             return new ResultHolder(false,e.getMessage());
+
         }
     }
+
+    public Object updateRemedyITSMEntry(JSONObject jsonObject) {
+
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.add("Authorization", jsonObject.getString("token"));
+            headers.add("X-AR-Client-Type", jsonObject.getString("X-AR-Client-Type"));
+            headers.add("X-AR-RPC-Queue", jsonObject.getString("X-AR-RPC-Queue"));
+
+            MultiValueMap<String, String> map = JSONObject.toJavaObject(jsonObject, MultiValueMap.class);
+            map.add("Content-Type", "application/json");
+
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            JSONObject json = restTemplate.postForEntity(jsonObject.getString("url"), request, JSONObject.class).getBody();
+
+            return new ResultHolder(json);
+        }catch (Exception e){
+
+            LogUtil.error(e.getMessage());
+            return new ResultHolder(false,e.getMessage());
+
+        }
+    }
+
 
 }
