@@ -19,102 +19,130 @@
 
 package com.fit2cloud.selfService.sdk;
 
+import com.fit2cloud.selfService.sdk.utils.LogUtil;
+import com.fit2cloud.selfService.sdk.constans.ResultHolder;
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 
-/**
- * sdk管理控制器
- *
- * @author maguohao
- * @Date 2018年11月16日 12:55:31
- */
 public class UBbaClient {
 
 
-    /**
-     * 创建token
-     * @param jsonObject
-     * @returnurl
-     */
-    public Object createToken(JSONObject jsonObject, String url) {
+    public Object createRemedyToken(JSONObject jsonObject) {
 
-        RestTemplate restTemplate=new RestTemplate();
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        JSONObject json = restTemplate.postForEntity(url, jsonObject, JSONObject.class).getBody();
+            MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+            map.add("username", jsonObject.getString("username"));
+            map.add("password", jsonObject.getString("password"));
 
-        return  json;
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            JSONObject json = restTemplate.postForEntity(jsonObject.getString("url"), request, JSONObject.class).getBody();
+
+            return new ResultHolder(json);
+        } catch (Exception e) {
+            LogUtil.error(e.getMessage());
+            return new ResultHolder(false, e.getMessage());
+        }
     }
 
-    /**
-     * 释放token
-     * @param jsonObject
-     * @return
-     */
-    public Object releaseToken(JSONObject jsonObject, String url) {
+//    public Object loginRemedyToken(){
+//
+//        CloseableHttpClient httpClient = HttpClients.createDefault();
+//        HttpPost httpPost = new HttpPost("http://localhost:8008/api/jwt/login");
+//
+//        // send the username and password
+//        List<NameValuePair> nvps = new ArrayList<>();
+//        nvps.add(new BasicNameValuePair("username", "Allen"));
+//        nvps.add(new BasicNameValuePair("password", "password"));
+//        httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+//
+//        // make the call and print the token
+//        HttpEntity entity = response.getEntity();
+//        String token = EntityUtils.toString(entity, StandardCharsets.UTF_8);
+//
+//        return token;
+//
+//    }
 
+    public void releaseRemedyToken(JSONObject jsonObject) {
 
-        RestTemplate restTemplate=new RestTemplate();
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
 
-        JSONObject json = restTemplate.postForEntity(url, jsonObject, JSONObject.class).getBody();
+            MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+            map.add("Authorization", jsonObject.getString("Authorization"));
 
-        return  json;
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            restTemplate.postForEntity(jsonObject.getString("url"), request, String.class).getBody();
+        } catch (Exception e) {
+            LogUtil.error(e.getMessage());
+        }
+
     }
 
-    /**
-     * 查询
-     * @param jsonObject
-     * @return
-     */
-    public Object queryResponse(JSONObject jsonObject, String url) {
+    public Object createRemedyEntry(JSONObject jsonObject) {
 
-        RestTemplate restTemplate=new RestTemplate();
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.add("Authorization", jsonObject.getString("token"));
+            headers.add("X-AR-Client-Type", jsonObject.getString("X-AR-Client-Type"));
+            headers.add("X-AR-RPC-Queue", jsonObject.getString("X-AR-RPC-Queue"));
 
-        JSONObject json = restTemplate.getForEntity(url, JSONObject.class).getBody();
+            MultiValueMap<String, String> map = JSONObject.toJavaObject(jsonObject, MultiValueMap.class);
+            map.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 
-        return  json;
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            JSONObject json = restTemplate.postForEntity(jsonObject.getString("url"), request, JSONObject.class).getBody();
+
+            return new ResultHolder(json);
+        }catch (Exception e){
+            LogUtil.error(e.getMessage());
+            return new ResultHolder(false,e.getMessage());
+        }
     }
 
-    /**
-     * 添加(关联task)
-     * @param jsonObject
-     * @return
-     */
-    public Object addTask(JSONObject jsonObject, String url) {
+    public Object updateRemedyEntry(JSONObject jsonObject) {
 
-        RestTemplate restTemplate=new RestTemplate();
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.add("Authorization", jsonObject.getString("token"));
+            headers.add("X-AR-Client-Type", jsonObject.getString("X-AR-Client-Type"));
+            headers.add("X-AR-RPC-Queue", jsonObject.getString("X-AR-RPC-Queue"));
 
-        JSONObject json = restTemplate.postForEntity(url,jsonObject, JSONObject.class).getBody();
+            MultiValueMap<String, String> map = JSONObject.toJavaObject(jsonObject, MultiValueMap.class);
+            map.add("Content-Type", "application/json");
 
-        return  json;
-    }
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 
-    /**
-     * 添加(不关联task)
-     * @param jsonObject
-     * @return
-     */
-    public Object addNoTask(JSONObject jsonObject, String url) {
+            RestTemplate restTemplate = new RestTemplate();
 
-        RestTemplate restTemplate=new RestTemplate();
+            JSONObject json = restTemplate.postForEntity(jsonObject.getString("url"), request, JSONObject.class).getBody();
 
-        JSONObject json = restTemplate.postForEntity(url,jsonObject, JSONObject.class).getBody();
-
-        return  json;
-    }
-
-    /**
-     * 修改
-     * @param jsonObject
-     * @return
-     */
-    public Object update(JSONObject jsonObject, String url) {
-
-        RestTemplate restTemplate=new RestTemplate();
-
-        JSONObject json = restTemplate.postForEntity(url,jsonObject, JSONObject.class).getBody();
-
-        return  json;
+            return new ResultHolder(json);
+        }catch (Exception e){
+            LogUtil.error(e.getMessage());
+            return new ResultHolder(false,e.getMessage());
+        }
     }
 
 }
