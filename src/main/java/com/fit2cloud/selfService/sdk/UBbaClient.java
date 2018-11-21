@@ -50,9 +50,12 @@ public class UBbaClient {
             JSONObject json = restTemplate.postForEntity(jsonObject.getString("url"), request, JSONObject.class).getBody();
 
             return new ResultHolder(json);
+
         } catch (Exception e) {
+
             LogUtil.error(e.getMessage());
             return new ResultHolder(false, e.getMessage());
+
         }
     }
 
@@ -70,8 +73,11 @@ public class UBbaClient {
             RestTemplate restTemplate = new RestTemplate();
 
             restTemplate.postForEntity(jsonObject.getString("url"), request, String.class).getBody();
+
         } catch (Exception e) {
+
             LogUtil.error(e.getMessage());
+
         }
 
     }
@@ -79,6 +85,7 @@ public class UBbaClient {
     public Object createRemedyCMDBEntry(JSONObject jsonObject) {
 
         try {
+
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.add("Authorization", jsonObject.getString("token"));
@@ -95,6 +102,7 @@ public class UBbaClient {
             JSONObject json = restTemplate.postForEntity(jsonObject.getString("url"), request, JSONObject.class).getBody();
 
             return new ResultHolder(json);
+
         }catch (Exception e){
 
             LogUtil.error(e.getMessage());
@@ -103,9 +111,10 @@ public class UBbaClient {
         }
     }
 
-    public Object createRemedyITSMEntry(JSONObject jsonObject) {
+    public Object createRemedyChangeEntry(JSONObject jsonObject) {
 
         try {
+
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.add("Authorization", jsonObject.getString("token"));
@@ -122,6 +131,7 @@ public class UBbaClient {
             JSONObject json = restTemplate.postForEntity(jsonObject.getString("url"), request, JSONObject.class).getBody();
 
             return new ResultHolder(json);
+
         }catch (Exception e){
 
             LogUtil.error(e.getMessage());
@@ -134,6 +144,7 @@ public class UBbaClient {
     public Object updateRemedyCMDBEntry(JSONObject jsonObject) {
 
         try {
+
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.add("Authorization", jsonObject.getString("token"));
@@ -150,6 +161,7 @@ public class UBbaClient {
             JSONObject json = restTemplate.postForEntity(jsonObject.getString("url"), request, JSONObject.class).getBody();
 
             return new ResultHolder(json);
+
         }catch (Exception e){
 
             LogUtil.error(e.getMessage());
@@ -158,9 +170,10 @@ public class UBbaClient {
         }
     }
 
-    public Object updateRemedyITSMEntry(JSONObject jsonObject) {
+    public Object updateRemedyChangeEntry(JSONObject jsonObject) {
 
         try {
+
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.add("Authorization", jsonObject.getString("token"));
