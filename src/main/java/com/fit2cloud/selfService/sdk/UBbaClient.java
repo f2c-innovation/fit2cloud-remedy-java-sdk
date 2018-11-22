@@ -29,6 +29,20 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+//import java.util.ArrayList;
+//import java.util.List;
+//
+//import org.apache.http.HttpEntity;
+//import org.apache.http.NameValuePair;
+//import org.apache.http.client.entity.UrlEncodedFormEntity;
+//import org.apache.http.client.methods.CloseableHttpResponse;
+//import org.apache.http.client.methods.HttpPost;
+//import org.apache.http.impl.client.CloseableHttpClient;
+//import org.apache.http.impl.client.HttpClients;
+//import org.apache.http.message.BasicNameValuePair;
+//import org.apache.http.util.EntityUtils;
+
+
 
 public class UBbaClient {
 
@@ -81,6 +95,23 @@ public class UBbaClient {
         }
 
     }
+
+//    public Object createRemedyCmbdEntry(JSONObject jsonObject)throws Exception{
+//
+//        CloseableHttpClient httpClient = HttpClients.createDefault();
+//        HttpPost httpPost = new HttpPost("http://localhost:8008/api/jwt/login");
+//        // send the username and password
+//        List<NameValuePair> nvps = new ArrayList<>();
+//        nvps.add(new BasicNameValuePair("username", "Allen"));
+//        nvps.add(new BasicNameValuePair("password", "password"));
+//        httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+//        // make the call and print the token
+//        CloseableHttpResponse response = httpClient.execute(httpPost);
+//        HttpEntity entity = response.getEntity();
+//        JSONObject json = EntityUtils.toString(entity, StandardCharsets.UTF_8);
+//        return json;
+//
+//    }
 
     public Object createRemedyCMDBEntry(JSONObject jsonObject) {
 
