@@ -113,15 +113,14 @@ public class UBbaClient {
 //
 //    }
 
-    public Object createRemedyCMDBEntry(JSONObject jsonObject) {
+    public Object createRemedyCMDBEntry(JSONObject jsonObject, JSONObject token, String url) {
 
         try {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.add("Authorization", jsonObject.getString("token"));
-            headers.add("X-AR-Client-Type", jsonObject.getString("X-AR-Client-Type"));
-            headers.add("X-AR-RPC-Queue", jsonObject.getString("X-AR-RPC-Queue"));
+            headers.add("accessKey",token.getString("accessKey"));
+            headers.add("securetKey",token.getString("securetKey"));
 
             MultiValueMap<String, String> map = JSONObject.toJavaObject(jsonObject, MultiValueMap.class);
             map.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
@@ -130,7 +129,7 @@ public class UBbaClient {
 
             RestTemplate restTemplate = new RestTemplate();
 
-            JSONObject json = restTemplate.postForEntity(jsonObject.getString("url"), request, JSONObject.class).getBody();
+            JSONObject json = restTemplate.postForEntity(url, request, JSONObject.class).getBody();
 
             return new ResultHolder(json);
 
@@ -142,15 +141,14 @@ public class UBbaClient {
         }
     }
 
-    public Object createRemedyChangeEntry(JSONObject jsonObject) {
+    public Object createRemedyChangeEntry(JSONObject jsonObject, JSONObject token, String url) {
 
         try {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.add("Authorization", jsonObject.getString("token"));
-            headers.add("X-AR-Client-Type", jsonObject.getString("X-AR-Client-Type"));
-            headers.add("X-AR-RPC-Queue", jsonObject.getString("X-AR-RPC-Queue"));
+            headers.add("accessKey",token.getString("accessKey"));
+            headers.add("securetKey",token.getString("securetKey"));
 
             MultiValueMap<String, String> map = JSONObject.toJavaObject(jsonObject, MultiValueMap.class);
             map.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
@@ -159,7 +157,7 @@ public class UBbaClient {
 
             RestTemplate restTemplate = new RestTemplate();
 
-            JSONObject json = restTemplate.postForEntity(jsonObject.getString("url"), request, JSONObject.class).getBody();
+            JSONObject json = restTemplate.postForEntity(url, request, JSONObject.class).getBody();
 
             return new ResultHolder(json);
 
@@ -172,24 +170,23 @@ public class UBbaClient {
     }
 
 
-    public Object updateRemedyCMDBEntry(JSONObject jsonObject) {
+    public Object updateRemedyCMDBEntry(JSONObject jsonObject, JSONObject token, String url) {
 
         try {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.add("Authorization", jsonObject.getString("token"));
-            headers.add("X-AR-Client-Type", jsonObject.getString("X-AR-Client-Type"));
-            headers.add("X-AR-RPC-Queue", jsonObject.getString("X-AR-RPC-Queue"));
+            headers.add("accessKey",token.getString("accessKey"));
+            headers.add("securetKey",token.getString("securetKey"));
 
             MultiValueMap<String, String> map = JSONObject.toJavaObject(jsonObject, MultiValueMap.class);
-            map.add("Content-Type", "application/json");
+            map.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 
             RestTemplate restTemplate = new RestTemplate();
 
-            JSONObject json = restTemplate.postForEntity(jsonObject.getString("url"), request, JSONObject.class).getBody();
+            JSONObject json = restTemplate.postForEntity(url, request, JSONObject.class).getBody();
 
             return new ResultHolder(json);
 
@@ -200,35 +197,5 @@ public class UBbaClient {
 
         }
     }
-
-    public Object updateRemedyChangeEntry(JSONObject jsonObject) {
-
-        try {
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.add("Authorization", jsonObject.getString("token"));
-            headers.add("X-AR-Client-Type", jsonObject.getString("X-AR-Client-Type"));
-            headers.add("X-AR-RPC-Queue", jsonObject.getString("X-AR-RPC-Queue"));
-
-            MultiValueMap<String, String> map = JSONObject.toJavaObject(jsonObject, MultiValueMap.class);
-            map.add("Content-Type", "application/json");
-
-            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
-
-            RestTemplate restTemplate = new RestTemplate();
-
-            JSONObject json = restTemplate.postForEntity(jsonObject.getString("url"), request, JSONObject.class).getBody();
-
-            return new ResultHolder(json);
-
-        }catch (Exception e){
-
-            LogUtil.error(e.getMessage());
-            return new ResultHolder(false,e.getMessage());
-
-        }
-    }
-
 
 }
