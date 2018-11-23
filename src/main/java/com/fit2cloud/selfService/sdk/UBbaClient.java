@@ -141,7 +141,7 @@ public class UBbaClient {
         }
     }
 
-    public void createRemedyChangeEntry(JSONObject jsonObject, String X_AUTH_APIKEY, String url) {
+    public JSONObject createRemedyChangeEntry(JSONObject jsonObject, String X_AUTH_APIKEY, String url) {
 
         try {
 
@@ -156,12 +156,16 @@ public class UBbaClient {
 
             RestTemplate restTemplate = new RestTemplate();
 
-            restTemplate.postForEntity(url, request, JSONObject.class).getBody();
+            JSONObject json = restTemplate.postForEntity(url, request, JSONObject.class).getBody();
+
+            return json;
 
 
         }catch (Exception e){
 
             LogUtil.error(e.getMessage());
+
+            return null;
 
         }
     }
