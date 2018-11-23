@@ -113,13 +113,13 @@ public class UBbaClient {
 //
 //    }
 
-    public JSONObject createRemedyCMDBEntry(JSONObject jsonObject, JSONObject token, String url) {
+    public JSONObject createRemedyCMDBEntry(JSONObject jsonObject, String X_AUTH_APIKEY, String url) {
 
         try {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.add("accessKey",token.getString("accessKey"));
+            headers.add("x_auth_apikey",X_AUTH_APIKEY);
 
             MultiValueMap<String, String> map = JSONObject.toJavaObject(jsonObject, MultiValueMap.class);
             map.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
@@ -141,13 +141,13 @@ public class UBbaClient {
         }
     }
 
-    public void createRemedyChangeEntry(JSONObject jsonObject, JSONObject token, String url) {
+    public void createRemedyChangeEntry(JSONObject jsonObject, String X_AUTH_APIKEY, String url) {
 
         try {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.add("accessKey",token.getString("accessKey"));
+            headers.add("x_auth_apikey",X_AUTH_APIKEY);
 
             MultiValueMap<String, String> map = JSONObject.toJavaObject(jsonObject, MultiValueMap.class);
             map.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
@@ -167,13 +167,13 @@ public class UBbaClient {
     }
 
 
-    public void updateRemedyCMDBEntry(JSONObject jsonObject, JSONObject token, String url) {
+    public void updateRemedyCMDBEntry(JSONObject jsonObject, String X_AUTH_APIKEY, String url) {
 
         try {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.add("accessKey",token.getString("accessKey"));
+            headers.add("x_auth_apikey",X_AUTH_APIKEY);
 
             MultiValueMap<String, String> map = JSONObject.toJavaObject(jsonObject, MultiValueMap.class);
             map.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
