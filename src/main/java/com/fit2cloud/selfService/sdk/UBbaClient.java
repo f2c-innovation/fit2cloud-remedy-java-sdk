@@ -134,7 +134,7 @@ public class UBbaClient {
 
             RestTemplate restTemplate = new RestTemplate();
 
-            JSONObject json = restTemplate.postForEntity(url, request, JSONObject.class).getBody();
+            JSONObject json = restTemplate.postForEntity(url, request, JSONObject.class, sslcontext).getBody();
 
             return json;
 
@@ -165,7 +165,7 @@ public class UBbaClient {
 
             RestTemplate restTemplate = new RestTemplate();
 
-            JSONObject json = restTemplate.postForEntity(url, request, JSONObject.class).getBody();
+            JSONObject json = restTemplate.postForEntity(url, request, JSONObject.class, sslcontext).getBody();
 
             return json;
 
@@ -199,7 +199,7 @@ public class UBbaClient {
 
             RestTemplate restTemplate = new RestTemplate();
 
-            JSONObject json = restTemplate.postForEntity(url, request, JSONObject.class).getBody();
+            JSONObject json = restTemplate.postForEntity(url, request, JSONObject.class, sslcontext).getBody();
 
             return json;
 
