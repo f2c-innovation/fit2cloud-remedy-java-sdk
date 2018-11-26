@@ -121,10 +121,7 @@ public class UBbaClient {
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.add("x_auth_apikey",X_AUTH_APIKEY);
 
-            MultiValueMap<String, String> map = JSONObject.toJavaObject(jsonObject, MultiValueMap.class);
-            map.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
-
-            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+            HttpEntity request = new HttpEntity(jsonObject, headers);
 
             RestTemplate restTemplate = new RestTemplate();
 
@@ -149,10 +146,11 @@ public class UBbaClient {
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.add("x_auth_apikey",X_AUTH_APIKEY);
 
-            MultiValueMap<String, String> map = JSONObject.toJavaObject(jsonObject, MultiValueMap.class);
-            map.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+//            MultiValueMap<String, String> map = JSONObject.toJavaObject(jsonObject, MultiValueMap.class);
+//
+//            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 
-            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+            HttpEntity request = new HttpEntity(jsonObject, headers);
 
             RestTemplate restTemplate = new RestTemplate();
 
@@ -171,7 +169,7 @@ public class UBbaClient {
     }
 
 
-    public void updateRemedyCMDBEntry(JSONObject jsonObject, String X_AUTH_APIKEY, String url) {
+    public JSONObject updateRemedyCMDBEntry(JSONObject jsonObject, String X_AUTH_APIKEY, String url) {
 
         try {
 
@@ -179,19 +177,24 @@ public class UBbaClient {
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.add("x_auth_apikey",X_AUTH_APIKEY);
 
-            MultiValueMap<String, String> map = JSONObject.toJavaObject(jsonObject, MultiValueMap.class);
-            map.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+//            MultiValueMap<String, String> map = JSONObject.toJavaObject(jsonObject, MultiValueMap.class);
+//
+//            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 
-            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+            HttpEntity request = new HttpEntity(jsonObject, headers);
 
             RestTemplate restTemplate = new RestTemplate();
 
-            restTemplate.postForEntity(url, request, JSONObject.class).getBody();
+            JSONObject json = restTemplate.postForEntity(url, request, JSONObject.class).getBody();
+
+            return json;
 
 
         }catch (Exception e){
 
             LogUtil.error(e.getMessage());
+
+            return null;
 
         }
     }
