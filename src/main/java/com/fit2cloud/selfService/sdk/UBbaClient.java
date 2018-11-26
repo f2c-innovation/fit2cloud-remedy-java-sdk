@@ -22,22 +22,25 @@ package com.fit2cloud.selfService.sdk;
 import com.fit2cloud.selfService.sdk.utils.LogUtil;
 import com.fit2cloud.selfService.sdk.constans.ResultHolder;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.*;
+import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
 //import java.util.ArrayList;
-//import java.util.List;
+import java.util.List;
 //
 //import org.apache.http.HttpEntity;
 //import org.apache.http.NameValuePair;
@@ -53,55 +56,7 @@ import java.security.cert.CertificateException;
 
 public class UBbaClient {
 
-
-    public Object createRemedyToken(JSONObject jsonObject) {
-
-        try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-            MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-            map.add("username", jsonObject.getString("username"));
-            map.add("password", jsonObject.getString("password"));
-
-            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
-
-            RestTemplate restTemplate = new RestTemplate();
-
-            JSONObject json = restTemplate.postForEntity(jsonObject.getString("url"), request, JSONObject.class).getBody();
-
-            return new ResultHolder(json);
-
-        } catch (Exception e) {
-
-            LogUtil.error(e.getMessage());
-            return new ResultHolder(false, e.getMessage());
-
-        }
-    }
-
-    public void releaseRemedyToken(JSONObject jsonObject) {
-
-        try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-
-            MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-            map.add("Authorization", jsonObject.getString("Authorization"));
-
-            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
-
-            RestTemplate restTemplate = new RestTemplate();
-
-            restTemplate.postForEntity(jsonObject.getString("url"), request, String.class).getBody();
-
-        } catch (Exception e) {
-
-            LogUtil.error(e.getMessage());
-
-        }
-
-    }
+    private static final HostnameVerifier PROMISCUOUS_VERIFIER = ( s, sslSession ) -> true;
 
 //    public Object createRemedyCmbdEntry(JSONObject jsonObject)throws Exception{
 //
@@ -179,7 +134,6 @@ public class UBbaClient {
         }
     }
 
-
     public JSONObject updateRemedyCMDBEntry(JSONObject jsonObject, String X_AUTH_APIKEY, String url) {
 
         try {
@@ -203,7 +157,6 @@ public class UBbaClient {
 
             return json;
 
-
         }catch (Exception e){
 
             LogUtil.error(e.getMessage());
@@ -211,6 +164,25 @@ public class UBbaClient {
             return null;
 
         }
+    }
+
+    public static RestTemplate restTemplate() throws Exception {
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpsURLConnection.setDefaultHostnameVerifier( PROMISCUOUS_VERIFIER );
+
+        restTemplate.setRequestFactory( new SimpleClientHttpRequestFactory() {
+            @Override
+            protected void prepareConnection(HttpURLConnection connection, String httpMethod) throws IOException {
+                if(connection instanceof HttpsURLConnection ){
+                    ((HttpsURLConnection) connection).setHostnameVerifier(PROMISCUOUS_VERIFIER);
+                }
+                super.prepareConnection(connection, httpMethod);
+            }
+        });
+
+        return restTemplate;
     }
 
     public static SSLContext createIgnoreVerifySSL() throws NoSuchAlgorithmException, KeyManagementException {
