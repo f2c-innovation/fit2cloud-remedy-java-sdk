@@ -157,6 +157,9 @@ public class HttpClientUtil {
                 if(response.getEntity()!=null){
                     resultString = EntityUtils.toString(response.getEntity(), "utf-8");
                 }
+            }else if(response.getStatusLine().getStatusCode() == 500){
+                resultString = EntityUtils.toString(response.getEntity(), "utf-8");
+                throw new Exception("HTTP-Internal Server Error 500 Reason is : " + resultString);
             }
         } catch (Exception e) {
             throw e;
