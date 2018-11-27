@@ -134,7 +134,7 @@ public class HttpClientUtil {
         return doPost(url, null);
     }
 
-    public static String doPostJson(String json, String X_AUTH_APIKEY, String url) throws Exception {
+    public static String doPostJson(String json, String url) throws Exception {
         // 创建Httpclient对象
         CloseableHttpClient httpClient = null;
         CloseableHttpResponse response = null;
@@ -142,7 +142,6 @@ public class HttpClientUtil {
         try {
             httpClient = createClient();
 
-            url = url + "?apiKey=" + X_AUTH_APIKEY;
             // 创建Http Post请求
             HttpPost httpPost = new HttpPost(url);
             // 创建请求内容
