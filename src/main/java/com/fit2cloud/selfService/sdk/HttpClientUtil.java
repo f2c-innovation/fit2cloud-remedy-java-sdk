@@ -1,5 +1,6 @@
 package com.fit2cloud.selfService.sdk;
 
+import com.fit2cloud.selfService.sdk.utils.LogUtil;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -160,6 +161,9 @@ public class HttpClientUtil {
             }else if(response.getStatusLine().getStatusCode() == 500){
                 resultString = EntityUtils.toString(response.getEntity(), "utf-8");
                 throw new Exception("HTTP-Internal Server Error 500 Reason is : " + resultString);
+            }else {
+                resultString = EntityUtils.toString(response.getEntity(), "utf-8");
+                throw new Exception("HTTP-Internal Server Error is : " + response.getStatusLine().getStatusCode() + " " + resultString);
             }
         } catch (Exception e) {
             throw e;
