@@ -55,12 +55,21 @@ public class HttpClientUtil {
 
             // 创建http GET请求
             HttpGet httpGet = new HttpGet(uri);
-
+            // 创建请求内容
+            httpGet.addHeader("Content-Type", "application/json");
             // 执行请求
             response = httpClient.execute(httpGet);
             // 判断返回状态是否为200
             if (response.getStatusLine().getStatusCode() == 200) {
-                resultString = EntityUtils.toString(response.getEntity(), "UTF-8");
+                if (response.getEntity() != null) {
+                    resultString = EntityUtils.toString(response.getEntity(), "utf-8");
+                }
+            } else if (response.getStatusLine().getStatusCode() == 500) {
+                resultString = EntityUtils.toString(response.getEntity(), "utf-8");
+                throw new Exception("HTTP-Internal Server Error 500 Reason is : " + resultString);
+            } else {
+                resultString = EntityUtils.toString(response.getEntity(), "utf-8");
+                throw new Exception("HTTP-Internal Server Error is : " + response.getStatusLine().getStatusCode() + " " + resultString);
             }
         } catch (Exception e) {
             throw e;
